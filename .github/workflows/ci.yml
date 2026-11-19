@@ -19,3 +19,16 @@ jobs:
       fetch-depth: 0
       tools: zizmor@1.32.0
       tool-assets: .github/source-tools.json
+
+  workflows:
+    name: workflows
+    if: always()
+    needs: [check]
+    runs-on: ubuntu-26.04
+    permissions: {}
+    timeout-minutes: 5
+    steps:
+      - name: Require the complete shared source check
+        env:
+          SOURCE_RESULT: ${{ needs.check.result }}
+        run: test "$SOURCE_RESULT" = success
